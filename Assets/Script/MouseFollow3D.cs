@@ -4,29 +4,41 @@ using UnityEngine;
 
 public class MouseFollow3D : MonoBehaviour
 {
-   
+
+
 
     public float speed = 5f;
     private Vector3 targetPosition;
 
-    // Update is called once per frame
     void Update()
     {
-        float moveX = Input.GetAxis("Horizontal");
-        float moveY = Input.GetAxis("Vertical");
-
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                targetPosition = hit.point;
-                transform.position = targetPosition;
-
-            }
+            MouseHandle();
         }
-        
+
+        MovementHandle();
     }
-   
+
+    void MouseHandle()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            targetPosition = hit.point;
+        }
+    }
+
+    void MovementHandle()
+    {
+        Vector3 direction = new Vector3(targetPosition.x, targetPosition.y, targetPosition.z);
+        Vector3 dirPos = direction - transform.position;
+
+        Vector3 move = dirPos.normalized * speed * Time.deltaTime;
+
+        transform.position += move;
+    }
+
 }

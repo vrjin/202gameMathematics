@@ -4,22 +4,18 @@ using UnityEngine;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-    public Transform player;
+    public Transform sun;
 
-    public float viewAngle = 60f; 
-   
-    // Update is called once per frame
+    public float speed = 5f;
+    public float radius = 30f;
+    public float angle = 0f;
+
     void Update()
     {
-        Vector3 toPlayer = (player.position - transform.position).normalized;
-        Vector3 forward = transform.forward;
+        angle += speed * Time.deltaTime;
+        float radians = angle * Mathf.Deg2Rad;
 
-        float dot = Vector3.Dot(forward, toPlayer);
-        float angle = Mathf.Acos(dot) * Mathf.Rad2Deg;
-
-        if (angle < viewAngle / 2)
-        {
-            Debug.Log("플레이어가 시야안에 있습니다!");
-        }
+        Vector3 position = new Vector3(Mathf.Cos(radians), 0, Mathf.Sin(radians)) * radius;
+        transform.position = sun.position + position;
     }
 }
